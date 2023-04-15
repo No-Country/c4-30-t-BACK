@@ -1,6 +1,14 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!
+  # before_action :authenticate_user!
   def show
+    user_id = params[:id]
+    @user = User.find(user_id)
+
+    if @user.present?
+      render json: @user
+    else
+      render json: "No se encontró al usuario", status: :bad_request
+    end
   end
 
   # POST /users or /users.json
@@ -22,15 +30,19 @@ class UsersController < ApplicationController
   end
 
   def update
-    if current_user.update_attributes(user_params)
-      render :show
+    user_id = params[:id]
+    @user = User.find(user_id)
+
+    if @user.update(user_params)
+      render json: @user
     else
-      render json: { errors: current_user.errors }, status: :unprocessable_entity
+      render json: "No se actualizó el usuario correctamente", status: :bad_request
     end
   end
+
   private
 
   def user_params
-    params.require(:user).permit(:username, :email, :password, :direction)
+    params.require(:user).permit(:name, :last_name, :phone, :direction, :district, :card_number, :card_type, :reference_house, :house_number, :expiration, :cvv)
   end
 end

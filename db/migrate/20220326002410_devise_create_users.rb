@@ -36,6 +36,15 @@ class DeviseCreateUsers < ActiveRecord::Migration[6.0]
       t.string :last_name
       t.text :direction
       t.boolean :admin
+      t.text :phone
+      t.text :district
+      t.integer :card_number
+      t.text :card_type
+      t.text :reference_house
+      t.text :house_number
+      t.string :expiration
+      t.string :cvv
+      t.string :code
 
       t.timestamps null: false
     end

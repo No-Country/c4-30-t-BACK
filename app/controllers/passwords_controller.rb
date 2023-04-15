@@ -17,7 +17,7 @@ class PasswordsController < ApplicationController
     @user = User.find_by(email: data["email"])
     @token = @user.to_sgid(expires_in: 20.minutes, purpose: "password_reset")
 
-    if @user.present? && data["code"] === 456789
+    if @user.present? && data["code"] === @user.code
       render json: { token: @token.to_s }
     else
       render json: "El código dado no es el correcto", status: :bad_request

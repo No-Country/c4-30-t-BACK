@@ -1,7 +1,7 @@
 class RegistersController < ApplicationController
   def sign_up
     data = user_params
-    @user = User.new(email: data["email"], password: data["password"])
+    @user = User.new(email: data["email"], password: data["password"], name: data["name"])
 
     if @user.save
       session[:user_id] = @user.id
@@ -33,7 +33,7 @@ class RegistersController < ApplicationController
 
     data = user_params
 
-    if data["code"] === 123488 && @user.present?
+    if data["code"] === @user.code && @user.present?
       render json: @user
     else
       render json: "Código incorrecto", status: :bad_request

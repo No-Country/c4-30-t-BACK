@@ -9,9 +9,9 @@ class Api::V1::ProductsController < Api::V1::BaseController
   end
 
   def update
-    new_data = product_params
+    @product = Product.find(params[:id])
 
-    if @product.update(new_data)
+    if @product.update(product_params)
       render json: @product
     else
       render_error
@@ -19,9 +19,7 @@ class Api::V1::ProductsController < Api::V1::BaseController
   end
 
   def create
-    data = product_params
-
-    @product = Product.new(name: data["name"], description: data["description"], price: data["price"], state: data["state"], image: data["image"], category_id: data["category_id"])
+    @product = Product.new(product_params)
 
     # @product.user = current_user
     # authorize @product
@@ -47,14 +45,11 @@ class Api::V1::ProductsController < Api::V1::BaseController
   end
 
   def product_params
-    body = request.body.as_json
-
-    JSON.parse(body[0]) if !body.empty?
+    params.require(:products).permit(:favorite)
   end
 
   def render_error
     render json: { errors: @product.errors.full_messages },
       status: :unprocessable_entity
   end
-
 end
